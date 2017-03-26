@@ -326,19 +326,19 @@ VisibilityPolygon.remove = function(index, heap, position, segments, destination
 };
 
 VisibilityPolygon.insert = function(index, heap, position, segments, destination, map) {
-	var intersect = VisibilityPolygon.intersectLines(segments[index][0], segments[index][1], position, destination);
+	const intersect = VisibilityPolygon.intersectLines(segments[index][0], segments[index][1], position, destination);
 	if (intersect.length == 0) return;
-	var cur = heap.length;
+	let cur = heap.length;
 	heap.push(index);
 	map[index] = cur;
 	while (cur > 0) {
-		var parent = VisibilityPolygon.parent(cur);
+		const parent = VisibilityPolygon.parent(cur);
 		if (!VisibilityPolygon.lessThan(heap[cur], heap[parent], position, segments, destination)) {
 			break;
 		}
 		map[heap[parent]] = cur;
 		map[heap[cur]] = parent;
-		var temp = heap[cur];
+		const temp = heap[cur];
 		heap[cur] = heap[parent];
 		heap[parent] = temp;
 		cur = parent;
@@ -346,19 +346,19 @@ VisibilityPolygon.insert = function(index, heap, position, segments, destination
 };
 
 VisibilityPolygon.lessThan = function(index1, index2, position, segments, destination) {
-	var inter1 = VisibilityPolygon.intersectLines(segments[index1][0], segments[index1][1], position, destination);
-	var inter2 = VisibilityPolygon.intersectLines(segments[index2][0], segments[index2][1], position, destination);
+	const inter1 = VisibilityPolygon.intersectLines(segments[index1][0], segments[index1][1], position, destination);
+	const inter2 = VisibilityPolygon.intersectLines(segments[index2][0], segments[index2][1], position, destination);
 	if (!VisibilityPolygon.equal(inter1, inter2)) {
-		var d1 = VisibilityPolygon.distance(inter1, position);
-		var d2 = VisibilityPolygon.distance(inter2, position);
+		const d1 = VisibilityPolygon.distance(inter1, position);
+		const d2 = VisibilityPolygon.distance(inter2, position);
 		return d1 < d2;
 	}
-	var end1 = 0;
+	let end1 = 0;
 	if (VisibilityPolygon.equal(inter1, segments[index1][0])) end1 = 1;
-	var end2 = 0;
+	let end2 = 0;
 	if (VisibilityPolygon.equal(inter2, segments[index2][0])) end2 = 1;
-	var a1 = VisibilityPolygon.angle2(segments[index1][end1], inter1, position);
-	var a2 = VisibilityPolygon.angle2(segments[index2][end2], inter2, position);
+	const a1 = VisibilityPolygon.angle2(segments[index1][end1], inter1, position);
+	const a2 = VisibilityPolygon.angle2(segments[index2][end2], inter2, position);
 	if (a1 < 180) {
 		if (a2 > 180) return true;
 		return a2 < a1;
@@ -367,28 +367,28 @@ VisibilityPolygon.lessThan = function(index1, index2, position, segments, destin
 };
 
 VisibilityPolygon.parent = function(index) {
-	return Math.floor((index-1)/2);
+	return Math.floor((index - 1) / 2);
 };
 
 VisibilityPolygon.child = function(index) {
-	return 2*index+1;
+	return 2 * index + 1;
 };
 
 VisibilityPolygon.angle2 = function(a, b, c) {
-	var a1 = VisibilityPolygon.angle(a,b);
-	var a2 = VisibilityPolygon.angle(b,c);
-	var a3 = a1 - a2;
+	const a1 = VisibilityPolygon.angle(a,b);
+	const a2 = VisibilityPolygon.angle(b,c);
+	const a3 = a1 - a2;
 	if (a3 < 0) a3 += 360;
 	if (a3 > 360) a3 -= 360;
 	return a3;
 };
 
 VisibilityPolygon.sortPoints = function(position, segments) {
-	var points = new Array(segments.length * 2);
-	for (var i = 0; i < segments.length; ++i) {
-		for (var j = 0; j < 2; ++j) {
-			var a = VisibilityPolygon.angle(segments[i][j], position);
-			points[2*i+j] = [i, j, a];
+	const points = new Array(segments.length * 2);
+	for (let i = 0; i < segments.length; ++i) {
+		for (let j = 0; j < 2; ++j) {
+			const a = VisibilityPolygon.angle(segments[i][j], position);
+			points[2 * i + j] = [i, j, a];
 		}
 	}
 	points.sort(function(a,b) {return a[2]-b[2];});
@@ -396,27 +396,27 @@ VisibilityPolygon.sortPoints = function(position, segments) {
 };
 
 VisibilityPolygon.angle = function(a, b) {
-	return Math.atan2(b[1]-a[1], b[0]-a[0]) * 180 / Math.PI;
+  return Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
 };
 
 VisibilityPolygon.intersectLines = function(a1, a2, b1, b2) {
-	var dbx = b2[0] - b1[0];
-	var dby = b2[1] - b1[1];
-	var dax = a2[0] - a1[0];
-	var day = a2[1] - a1[1];
-	
-	var u_b  = dby * dax - dbx * day;
+	const dbx = b2[0] - b1[0];
+	const dby = b2[1] - b1[1];
+	const dax = a2[0] - a1[0];
+	const day = a2[1] - a1[1];
+
+	const u_b  = dby * dax - dbx * day;
 	if (u_b != 0) {
-		var ua = (dbx * (a1[1] - b1[1]) - dby * (a1[0] - b1[0])) / u_b;
-		return [a1[0] - ua * -dax, a1[1] - ua * -day];
-	}
-	return [];
+    const ua = (dbx * (a1[1] - b1[1]) - dby * (a1[0] - b1[0])) / u_b;
+    return [a1[0] - ua * -dax, a1[1] - ua * -day];
+  }
+  return [];
 };
 
 VisibilityPolygon.distance = function(a, b) {
-	var dx = a[0]-b[0];
-	var dy = a[1]-b[1];
-	return dx*dx + dy*dy;
+  const dx = a[0] - b[0];
+  const dy = a[1] - b[1];
+  return dx * dx + dy * dy;
 };
 
 VisibilityPolygon.isOnSegment = function(xi, yi, xj, yj, xk, yk) {
@@ -425,16 +425,16 @@ VisibilityPolygon.isOnSegment = function(xi, yi, xj, yj, xk, yk) {
 };
 
 VisibilityPolygon.computeDirection = function(xi, yi, xj, yj, xk, yk) {
-  a = (xk - xi) * (yj - yi);
-  b = (xj - xi) * (yk - yi);
+  const a = (xk - xi) * (yj - yi);
+  const b = (xj - xi) * (yk - yi);
   return a < b ? -1 : a > b ? 1 : 0;
 };
 
 VisibilityPolygon.doLineSegmentsIntersect = function(x1, y1, x2, y2, x3, y3, x4, y4) {
-  d1 = VisibilityPolygon.computeDirection(x3, y3, x4, y4, x1, y1);
-  d2 = VisibilityPolygon.computeDirection(x3, y3, x4, y4, x2, y2);
-  d3 = VisibilityPolygon.computeDirection(x1, y1, x2, y2, x3, y3);
-  d4 = VisibilityPolygon.computeDirection(x1, y1, x2, y2, x4, y4);
+  const d1 = VisibilityPolygon.computeDirection(x3, y3, x4, y4, x1, y1);
+  const d2 = VisibilityPolygon.computeDirection(x3, y3, x4, y4, x2, y2);
+  const d3 = VisibilityPolygon.computeDirection(x1, y1, x2, y2, x3, y3);
+  const d4 = VisibilityPolygon.computeDirection(x1, y1, x2, y2, x4, y4);
   return (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) &&
           ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) ||
          (d1 == 0 && VisibilityPolygon.isOnSegment(x3, y3, x4, y4, x1, y1)) ||
@@ -442,3 +442,5 @@ VisibilityPolygon.doLineSegmentsIntersect = function(x1, y1, x2, y2, x3, y3, x4,
          (d3 == 0 && VisibilityPolygon.isOnSegment(x1, y1, x2, y2, x3, y3)) ||
          (d4 == 0 && VisibilityPolygon.isOnSegment(x1, y1, x2, y2, x4, y4));
 };
+
+export default VisibilityPolygon;
