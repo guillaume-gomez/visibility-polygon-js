@@ -1,0 +1,22 @@
+{
+  "name": "visibility-polygon-js",
+  "version": "1.0.0",
+  "description": "TODO",
+  "main": "visibility_polygon.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guillaume-gomez/visibility-polygon-js.git"
+  },
+  "keywords": [
+    "geometry"
+  ],
+  "author": "Guillaume Gomez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guillaume-gomez/visibility-polygon-js/issues"
+  },
+  "homepage": "https://github.com/guillaume-gomez/visibility-polygon-js#readme"
+}
