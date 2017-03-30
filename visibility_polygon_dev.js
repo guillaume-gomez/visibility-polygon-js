@@ -147,7 +147,7 @@ VisibilityPolygon.computeViewport = function(position, segments, viewportMinCorn
 		if (segments[i][0][1] > viewportMaxCorner[1] && segments[i][1][1] > viewportMaxCorner[1]) continue;
 		let intersections = [];
 		for (let j = 0; j < viewport.length; ++j) {
-			const k = j + 1;
+			let k = j + 1;
 			if (k == viewport.length) k = 0;
 			if (VisibilityPolygon.doLineSegmentsIntersect(segments[i][0][0], segments[i][0][1], segments[i][1][0], segments[i][1][1], viewport[j][0], viewport[j][1], viewport[k][0], viewport[k][1])) {
 				const intersect = VisibilityPolygon.intersectLines(segments[i][0], segments[i][1], viewport[j], viewport[k]);
@@ -206,7 +206,7 @@ VisibilityPolygon.inPolygon = function(position, polygon) {
 	const edge = [val-1, val-1];
 	let parity = 0;
 	for (let i = 0; i < polygon.length; ++i) {
-		const j = i + 1;
+		let j = i + 1;
 		if (j == polygon.length) j = 0;
 		if (VisibilityPolygon.doLineSegmentsIntersect(edge[0], edge[1], position[0], position[1], polygon[i][0], polygon[i][1], polygon[j][0], polygon[j][1])) {
 			const intersect = VisibilityPolygon.intersectLines(edge, position, polygon[i], polygon[j]);
@@ -227,7 +227,7 @@ VisibilityPolygon.convertToSegments = function(polygons) {
 	let segments = [];
 	for (let i = 0; i < polygons.length; ++i) {
 		for (let j = 0; j < polygons[i].length; ++j) {
-			const k = j + 1;
+			let k = j + 1;
 			if (k == polygons[i].length) k = 0;
 			segments.push([[polygons[i][j][0], polygons[i][j][1]], [polygons[i][k][0], polygons[i][k][1]]]);
 		}
@@ -250,7 +250,7 @@ VisibilityPolygon.breakIntersections = function(segments) {
 		}
 		let start = [segments[i][0][0], segments[i][0][1]];
 		while (intersections.length > 0) {
-			const endIndex = 0;
+			let endIndex = 0;
 			let endDis = VisibilityPolygon.distance(start, intersections[0]);
 			for (let j = 1; j < intersections.length; ++j) {
 				const dis = VisibilityPolygon.distance(start, intersections[j]);
@@ -287,19 +287,19 @@ VisibilityPolygon.remove = function(index, heap, position, segments, destination
 	heap[index] = heap.pop();
 	map[heap[index]] = index;
 	let cur = index;
-	const parent = VisibilityPolygon.parent(cur);
-	if (cur != 0 && VisibilityPolygon.lessThan(heap[cur], heap[parent], position, segments, destination)) {
+	const parentNode = VisibilityPolygon.parent(cur);
+	if (cur != 0 && VisibilityPolygon.lessThan(heap[cur], heap[parentNode], position, segments, destination)) {
 		while (cur > 0) {
 			var parent = VisibilityPolygon.parent(cur);
 			if (!VisibilityPolygon.lessThan(heap[cur], heap[parent], position, segments, destination)) {
 				break;
 			}
-			map[heap[parent]] = cur;
-			map[heap[cur]] = parent;
+			map[heap[parentNode]] = cur;
+			map[heap[cur]] = parentNode;
 			var temp = heap[cur];
-			heap[cur] = heap[parent];
-			heap[parent] = temp;
-			cur = parent;
+			heap[cur] = heap[parentNode];
+			heap[parentNode] = temp;
+			cur = parentNode;
 		}
 	} else {
 		while (true) {
@@ -377,7 +377,7 @@ VisibilityPolygon.child = function(index) {
 VisibilityPolygon.angle2 = function(a, b, c) {
 	const a1 = VisibilityPolygon.angle(a,b);
 	const a2 = VisibilityPolygon.angle(b,c);
-	const a3 = a1 - a2;
+	let a3 = a1 - a2;
 	if (a3 < 0) a3 += 360;
 	if (a3 > 360) a3 -= 360;
 	return a3;
